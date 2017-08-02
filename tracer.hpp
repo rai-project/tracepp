@@ -39,7 +39,7 @@ class Tracer {
     global_span_->submit();
 
     fprintf(stderr, "Shutting down collector...\n");
-    collector()->shutdown(std::chrono::seconds(15));
+    collector()->shutdown(std::chrono::seconds(35));
 
     fprintf(stderr, "tracer dtor done!\n");
   }

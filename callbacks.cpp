@@ -18,6 +18,8 @@
 #include "util_cuda.hpp"
 #include "util_cupti.hpp"
 
+#define printf(...)
+
 // FIXME - this should be per-thread most likely
 typedef struct {
   dim3 gridDim;

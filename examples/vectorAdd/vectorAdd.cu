@@ -126,12 +126,15 @@ main(void)
         exit(EXIT_FAILURE);
     }
 
+    for (int ii = 0; ii < 10; ii ++) {
     // Launch the Vector Add CUDA Kernel
     int threadsPerBlock = 256;
     int blocksPerGrid =(numElements + threadsPerBlock - 1) / threadsPerBlock;
     printf("CUDA kernel launch with %d blocks of %d threads\n", blocksPerGrid, threadsPerBlock);
     vectorAdd<<<blocksPerGrid, threadsPerBlock>>>(d_A, d_B, d_C, numElements);
     err = cudaGetLastError();
+cudaDeviceSynchronize();
+    }
 
     if (err != cudaSuccess)
     {
