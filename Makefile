@@ -16,14 +16,19 @@ INC = -I/usr/local/cuda/include \
       -I/usr/local/cuda/extras/CUPTI/include \
       -I/usr/local/include
 
-LIB = -L/usr/local/cuda/extras/CUPTI/lib64 -lcupti \
-      -L/usr/local/cuda/lib64 -lcuda -lcudart -lcudadevrt \
+LIB = -L/usr/local/lib \
+			-L/usr/local/cuda/extras/CUPTI/lib64  \
+      -L/usr/local/cuda/lib64 \
+      libzipkin.a \
+			-lcupti
+			-lcuda \
+			-lcudart \
+			-lcudadevrt \
       -ldl \
-      /usr/local/lib/libzipkin.a \
       -lglog \
-      -L/usr/local/lib -lfolly \
-      -L/usr/local/lib -lthrift \
-      -L/usr/local/lib -lrdkafka++ \
+      -lfolly \
+      -lthrift \
+      -lrdkafka++ \
       -lcurl
 
 all: $(TARGETS)
@@ -40,7 +45,7 @@ prof.so: $(OBJECTS)
 
 %.o : %.cu
 	$(NVCC) -std=c++11 -arch=sm_35 -dc  -Xcompiler -fPIC $^ -o test.o
-	$(NVCC) -std=c++11 -arch=sm_35 -Xcompiler -fPIC -dlink test.o -lcudadevrt -lcudart -o $@	
+	$(NVCC) -std=c++11 -arch=sm_35 -Xcompiler -fPIC -dlink test.o -lcudadevrt -lcudart -o $@
 
 -include $(DEPS)
 

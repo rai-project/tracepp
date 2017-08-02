@@ -14,9 +14,9 @@
 
 #include <zipkin/zipkin.hpp>
 
+#include "tracer.hpp"
 #include "util_cuda.hpp"
 #include "util_cupti.hpp"
-#include "tracer.hpp"
 
 // FIXME - this should be per-thread most likely
 typedef struct {
@@ -75,19 +75,15 @@ static void handleCudaLaunch(const CUpti_CallbackData *cbInfo) {
   const char *symbolName = cbInfo->symbolName;
   printf("launching %s\n", symbolName);
 
-
   // Get the current stream
   const cudaStream_t stream = ConfiguredCall().stream;
-  (void) stream;
+  (void)stream;
 
-  for (size_t argIdx = 0; argIdx < ConfiguredCall().args.size();
-       ++argIdx) {
-      printf("kernel arg=%lu\n", ConfiguredCall().args[argIdx]);
+  for (size_t argIdx = 0; argIdx < ConfiguredCall().args.size(); ++argIdx) {
+    printf("kernel arg=%lu\n", ConfiguredCall().args[argIdx]);
   }
 
-
   if (cbInfo->callbackSite == CUPTI_API_ENTER) {
-
   } else if (cbInfo->callbackSite == CUPTI_API_EXIT) {
     printf("callback: cudaLaunch exit\n");
     ConfiguredCall().valid = false;
@@ -99,18 +95,17 @@ static void handleCudaLaunch(const CUpti_CallbackData *cbInfo) {
   printf("callback: cudaLaunch: done\n");
 }
 
-static void handleCudaMemcpy( const CUpti_CallbackData *cbInfo) {
+static void handleCudaMemcpy(const CUpti_CallbackData *cbInfo) {
   // extract API call parameters
   auto params = ((cudaMemcpy_v3020_params *)(cbInfo->functionParams));
   const uintptr_t dst = (uintptr_t)params->dst;
   const uintptr_t src = (uintptr_t)params->src;
   const cudaMemcpyKind kind = params->kind;
   const size_t count = params->count;
-  (void) dst;
-  (void) src;
-  (void) kind;
-  (void) count;
-
+  (void)dst;
+  (void)src;
+  (void)kind;
+  (void)count;
 
   if (cbInfo->callbackSite == CUPTI_API_ENTER) {
     printf("callback: cudaMemcpy entry\n");
@@ -128,7 +123,7 @@ static void handleCudaMemcpy( const CUpti_CallbackData *cbInfo) {
   }
 }
 
-std::vector<zipkin::Span*> spanStack_;
+std::vector<zipkin::Span *> spanStack_;
 
 zipkin::Span *stack_back() {
   if (spanStack_.empty()) {
@@ -144,7 +139,8 @@ void CUPTIAPI callback(void *userdata, CUpti_CallbackDomain domain,
   (void)userdata;
 
   if (cbInfo->callbackSite == CUPTI_API_ENTER) {
-    zipkin::Span *span  = stack_back()->span(""); // This name seems to do nothing
+    zipkin::Span *span =
+        stack_back()->span(""); // This name seems to do nothing
     span->with_name(cbInfo->functionName);
     spanStack_.push_back(span);
   }
@@ -152,55 +148,54 @@ void CUPTIAPI callback(void *userdata, CUpti_CallbackDomain domain,
 
   // Data is collected for the following APIs
   switch (domain) {
-  case CUPTI_CB_DOMAIN_RUNTIME_API: {
-    switch (cbid) {
-    case CUPTI_RUNTIME_TRACE_CBID_cudaMemcpy_v3020:
-      handleCudaMemcpy(cbInfo);
-      break;
-    case CUPTI_RUNTIME_TRACE_CBID_cudaLaunch_v3020:
-      handleCudaLaunch(cbInfo);
-      break;
-    case CUPTI_RUNTIME_TRACE_CBID_cudaConfigureCall_v3020:
-      handleCudaConfigureCall(cbInfo);
-      break;
-    case CUPTI_RUNTIME_TRACE_CBID_cudaSetupArgument_v3020:
-      handleCudaSetupArgument(cbInfo);
-      break;
-    default:
-      printf("skipping runtime call %s...\n", cbInfo->functionName);
-      break;
+    case CUPTI_CB_DOMAIN_RUNTIME_API: {
+      switch (cbid) {
+        case CUPTI_RUNTIME_TRACE_CBID_cudaMemcpy_v3020:
+          handleCudaMemcpy(cbInfo);
+          break;
+        case CUPTI_RUNTIME_TRACE_CBID_cudaLaunch_v3020:
+          handleCudaLaunch(cbInfo);
+          break;
+        case CUPTI_RUNTIME_TRACE_CBID_cudaConfigureCall_v3020:
+          handleCudaConfigureCall(cbInfo);
+          break;
+        case CUPTI_RUNTIME_TRACE_CBID_cudaSetupArgument_v3020:
+          handleCudaSetupArgument(cbInfo);
+          break;
+        default:
+          printf("skipping runtime call %s...\n", cbInfo->functionName);
+          break;
+      }
+    } break;
+    case CUPTI_CB_DOMAIN_DRIVER_API: {
+      switch (cbid) {
+        default:
+          printf("skipping driver call %s...\n", cbInfo->functionName);
+          break;
+      }
     }
-  } break;
-  case CUPTI_CB_DOMAIN_DRIVER_API: {
-    switch (cbid) {
     default:
-      printf("skipping driver call %s...\n", cbInfo->functionName);
       break;
-    }
-  }
-  default:
-    break;
   }
 
   if (cbInfo->callbackSite == CUPTI_API_EXIT) {
-    zipkin::Span *span  = stack_back();
-  auto endpoint = Tracer::instance().endpoint();
-  span->client_send(&endpoint);
-  span->submit();
-  spanStack_.pop_back();
+    zipkin::Span *span = stack_back();
+    auto endpoint = Tracer::instance().endpoint();
+    span->client_send(&endpoint);
+    span->submit();
+    spanStack_.pop_back();
   }
-  
 }
 
 static int activateCallbacks() {
-
   static CUpti_SubscriberHandle SUBSCRIBER;
 
-  CUPTI_CHECK(cuptiSubscribe(&SUBSCRIBER, (CUpti_CallbackFunc)callback, nullptr));
+  CUPTI_CHECK(
+      cuptiSubscribe(&SUBSCRIBER, (CUpti_CallbackFunc)callback, nullptr));
   CUPTI_CHECK(cuptiEnableDomain(1, SUBSCRIBER, CUPTI_CB_DOMAIN_RUNTIME_API));
   CUPTI_CHECK(cuptiEnableDomain(1, SUBSCRIBER, CUPTI_CB_DOMAIN_DRIVER_API));
 
-return 0;
+  return 0;
 }
 
 void onceSetupZipkin() {
@@ -211,7 +206,6 @@ void onceSetupZipkin() {
 }
 
 static int activateZipkin() {
-
   for (int ii = 0; ii < 2; ii++) {
     // trace_name is the name of the trace
     zipkin::Span &span = *Tracer::instance().span("trace_name");
@@ -224,7 +218,6 @@ static int activateZipkin() {
     span << std::make_pair("another_tag", std::to_string(ii));
     span << std::make_pair("something_else", "something_else");
   }
-
 
   return 0;
 }
