@@ -2,7 +2,8 @@ TARGETS = prof.so
 
 OBJECTS = \
 callbacks.o \
-preload_cudart.o \
+config.o \
+entry.o \
 tracer.o
 
 DEPS=$(patsubst %.o,%.d,$(OBJECTS))
