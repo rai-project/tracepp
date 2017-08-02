@@ -198,30 +198,6 @@ static int activateCallbacks() {
   return 0;
 }
 
-void onceSetupZipkin() {
-  static bool done = false;
-  if (!done) {
-    done = true;
-  }
-}
-
-static int activateZipkin() {
-  for (int ii = 0; ii < 2; ii++) {
-    // trace_name is the name of the trace
-    zipkin::Span &span = *Tracer::instance().span("trace_name");
-    zipkin::Span::Scope scope(span);
-
-    auto endpoint = Tracer::instance().endpoint();
-    span.client_send(&endpoint);
-
-    span << std::make_pair("some_tag", "0.3." + std::to_string(ii));
-    span << std::make_pair("another_tag", std::to_string(ii));
-    span << std::make_pair("something_else", "something_else");
-  }
-
-  return 0;
-}
-
 // start callbacks only the first time
 void onceActivateCallbacks() {
   static bool done = false;

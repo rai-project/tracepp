@@ -32,8 +32,12 @@ LIB = -L/usr/local/lib \
       -lfolly \
       -lthrift \
       -lrdkafka++ \
+			-lboost_context-mt \
+			-lboost_program_options \
 			-lboost_thread-mt \
 			-lboost_system \
+			-lboost_filesystem \
+			-lboost_regex-mt \
 			-lz \
       -lcurl
 

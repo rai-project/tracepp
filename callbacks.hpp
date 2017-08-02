@@ -2,6 +2,5 @@
 #define CALLBACKS_HPP
 
 void onceActivateCallbacks();
-void onceSetupZipkin();
 
 #endif

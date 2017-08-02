@@ -31,3 +31,12 @@ Navigate your web browser to `localhost:9411` and look at the traces!
 `callbacks.cpp` defines callback functions that are executed by CUPTI. It also defines a function that initializes CUPTI.
 
 `preload_cudart.cpp` defines verions of some CUDA runtime functions that the LD_PRELOAD mechanism will use instead of the actual CUDA runtime functions.
+
+## MacOSX
+
+On MacOSX you cannot use `LD_PRELOAD` to load the library you'd want to do something lik
+
+
+~~~
+DYLD_INSERT_LIBRARIES=prof.so DYLD_FORCE_FLAT_NAMESPACE=1
+~~~
