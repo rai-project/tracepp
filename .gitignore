@@ -1,7 +1,6 @@
 *.d
 *.o
 
-.vscode
 examples/vectorAdd/vec
 
 
