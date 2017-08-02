@@ -21,7 +21,7 @@ LIB = -L/usr/local/lib \
 			-L/usr/local/cuda/extras/CUPTI/lib64  \
       -L/usr/local/cuda/lib64 \
       libzipkin.a \
-			-lcupti
+			-lcupti \
 			-lcuda \
 			-lcudart \
 			-lcudadevrt \
