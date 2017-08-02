@@ -18,6 +18,8 @@ INC = -I/usr/local/cuda/include \
       -I/usr/local/include
 
 LIB = -L/usr/local/lib \
+      -L/usr/local/cuda/lib \
+			-L/usr/local/cuda/extras/CUPTI/lib  \
 			-L/usr/local/cuda/extras/CUPTI/lib64  \
       -L/usr/local/cuda/lib64 \
       libzipkin.a \
@@ -30,6 +32,9 @@ LIB = -L/usr/local/lib \
       -lfolly \
       -lthrift \
       -lrdkafka++ \
+			-lboost_thread-mt \
+			-lboost_system \
+			-lz \
       -lcurl
 
 all: $(TARGETS)
