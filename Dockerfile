@@ -44,4 +44,4 @@ RUN git config --global http.sslVerify false && \
     git clone https://github.com/rai-project/tracepp.git $TRACEPP_SRC && cd $TRACEPP_SRC && git fetch --all
 
 WORKDIR $TRACEPP_SRC
-RUN make -j`nproc`
+RUN make
