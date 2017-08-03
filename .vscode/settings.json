@@ -5,16 +5,9 @@
 		"**/.hg": true,
 		"**/CVS": true,
 		"**/.DS_Store": true,
-		"**/*.o": true,
-		"**/*.so": true,
-		"**/*.d": true,
-		"**/*.a": true,
 		"**/node_modules": true,
-		"Build": true,
-		"build": true,
-		".gitignore": true,
-		".clang-format": true
-  },
+		"Build": true
+	},
 	"C_Cpp.clang_format_sortIncludes": true,
 	"C_Cpp.clang_format_formatOnSave": true,
 	"files.associations": {

@@ -1,5 +1,5 @@
-#ifndef TRACER_HPP
-#define TRACER_HPP
+#ifndef __TRACEPP_TRACER_HPP__
+#define __TRACEPP_TRACER_HPP__
 
 #include <memory>
 #include <string>
@@ -57,4 +57,4 @@ class Tracer {
   static Tracer &instance();
 };
 
-#endif
+#endif  // __TRACEPP_TRACER_HPP__

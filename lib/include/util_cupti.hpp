@@ -1,5 +1,5 @@
-#ifndef UTIL_CUPTI_HPP
-#define UTIL_CUPTI_HPP
+#ifndef __TRACEPP_UTIL_CUPTI_HPP__
+#define __TRACEPP_UTIL_CUPTI_HPP__
 
 #include <cupti.h>
 #include <cstdio>
@@ -8,7 +8,7 @@
 #define CUPTI_CHECK(ans) \
   { cuptiAssert((ans), __FILE__, __LINE__); }
 static inline void cuptiAssert(CUptiResult code, const char *file, int line,
-                        bool abort = true) {
+                               bool abort = true) {
   if (code != CUPTI_SUCCESS) {
     const char *errstr;
     cuptiGetResultString(code, &errstr);
@@ -17,4 +17,4 @@ static inline void cuptiAssert(CUptiResult code, const char *file, int line,
   }
 }
 
-#endif
+#endif  // __TRACEPP_UTIL_CUPTI_HPP__

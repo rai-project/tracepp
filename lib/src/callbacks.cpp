@@ -60,7 +60,7 @@ static void handleCudaSetupArgument(const CUpti_CallbackData *cbInfo) {
         ((cudaSetupArgument_v3020_params *)(cbInfo->functionParams));
     const uintptr_t arg =
         (uintptr_t) * static_cast<const void *const *>(
-                          params->arg); // arg is a pointer to the arg.
+                          params->arg);  // arg is a pointer to the arg.
     // const size_t size     = params->size;
     // const size_t offset   = params->offset;
 
@@ -142,7 +142,7 @@ void CUPTIAPI callback(void *userdata, CUpti_CallbackDomain domain,
 
   if (cbInfo->callbackSite == CUPTI_API_ENTER) {
     zipkin::Span *span =
-        stack_back()->span(""); // This name seems to do nothing
+        stack_back()->span("");  // This name seems to do nothing
     span->with_name(cbInfo->functionName);
     spanStack_.push_back(span);
   }

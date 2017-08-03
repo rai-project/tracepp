@@ -1,5 +1,5 @@
-#ifndef UTIL_CUDA_HPP
-#define UTIL_CUDA_HPP
+#ifndef __TRACEPP_UTIL_CUDA_HPP__
+#define __TRACEPP_UTIL_CUDA_HPP__
 
 #include <cuda_runtime.h>
 #include <cstdio>
@@ -8,7 +8,7 @@
 #define CUDA_CHECK(ans) \
   { gpuAssert((ans), __FILE__, __LINE__); }
 static inline void gpuAssert(cudaError_t code, const char *file, int line,
-                      bool abort = true) {
+                             bool abort = true) {
   if (code != cudaSuccess) {
     fprintf(stderr, "CUDA_CHECK: %s %s %d\n", cudaGetErrorString(code), file,
             line);
@@ -16,4 +16,4 @@ static inline void gpuAssert(cudaError_t code, const char *file, int line,
   }
 }
 
-#endif
+#endif  // __TRACEPP_UTIL_CUDA_HPP__
