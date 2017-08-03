@@ -1,10 +1,10 @@
 TARGETS = prof.so
 
 OBJECTS = \
-callbacks.o \
-config.o \
-entry.o \
-tracer.o
+					src/callbacks.o \
+					src/config.o \
+					src/entry.o \
+					src/tracer.o
 
 DEPS=$(patsubst %.o,%.d,$(OBJECTS))
 
@@ -15,23 +15,24 @@ NVCC=nvcc
 NVCCFLAGS= -std=c++11 -g -arch=sm_35 -Xcompiler -Wall,-Wextra,-fPIC,-fno-omit-frame-pointer
 INC = -I/usr/local/cuda/include \
       -I/usr/local/cuda/extras/CUPTI/include \
-      -I/usr/local/include
+      -I/usr/local/include \
+			-Isrc
 
 LIB = -L/usr/local/lib \
       -L/usr/local/cuda/lib \
 			-L/usr/local/cuda/extras/CUPTI/lib  \
 			-L/usr/local/cuda/extras/CUPTI/lib64  \
-      -L/usr/local/cuda/lib64 \
-      libzipkin.a \
+			-L/usr/local/cuda/lib64 \
+			libzipkin.a \
 			-lcupti \
 			-lcuda \
 			-lcudart \
 			-lcudadevrt \
-      -ldl \
-      -lglog \
-      -lfolly \
-      -lthrift \
-      -lrdkafka++ \
+			-ldl \
+			-lglog \
+			-lfolly \
+			-lthrift \
+			-lrdkafka++ \
 			-lboost_context-mt \
 			-lboost_program_options \
 			-lboost_thread-mt \
