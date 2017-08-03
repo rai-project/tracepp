@@ -1,4 +1,4 @@
-# cuda-zipkin-cpp
+# tracepp [![Build Status](https://travis-ci.org/rai-project/tracepp.svg?branch=master)](https://travis-ci.org/rai-project/tracepp)
 
 This is an example of how to combine CUPTI, LD_PRELOAD, zipkin-cpp, and OpenZipkin to record a zipkin trace for every CUDA API call.
 
@@ -36,7 +36,4 @@ Navigate your web browser to `localhost:9411` and look at the traces!
 
 On MacOSX you cannot use `LD_PRELOAD` to load the library you'd want to do something lik
 
-
-~~~
-DYLD_INSERT_LIBRARIES=prof.so DYLD_FORCE_FLAT_NAMESPACE=1
-~~~
+    DYLD_INSERT_LIBRARIES=prof.so DYLD_FORCE_FLAT_NAMESPACE=1
